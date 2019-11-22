@@ -3,8 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/AppropriateCosmetics/src/java/com/appropicatecosmetic/xmlchecker/XmlSyntaxChecker.java</file>
-            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/AppropriateCosmetics/src/java/com/appropicatecosmetic/crawler/maihan/MaihanCategoriesPageCrawler.java</file>
+            <file>file:/F:/git/AppropriateCosmetics/src/java/com/appropicatecosmetic/crawler/mapleleaf/MapleleafCategoryPageCrawler.java</file>
+            <file>file:/F:/git/AppropriateCosmetics/src/java/com/appropicatecosmetic/crawler/mapleleaf/MapleleafThread.java</file>
+            <file>file:/F:/git/AppropriateCosmetics/src/java/com/appropicatecosmetic/crawler/maihan/MaihanCategoriesPageCrawler.java</file>
         </group>
     </open-files>
 </project-private>

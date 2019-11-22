@@ -6,6 +6,7 @@
 package com.appropicatecosmetic.servlet;
 
 import com.appropicatecosmetic.crawler.maihan.MaihanThread;
+import com.appropicatecosmetic.crawler.mapleleaf.MapleleafThread;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletContext;
@@ -38,6 +39,8 @@ public class CrawlServlet extends HttpServlet {
             ServletContext context = getServletContext();
             MaihanThread maihanThread = new MaihanThread(context);
             maihanThread.start();
+            MapleleafThread mapleleafThread = new MapleleafThread(context);
+            mapleleafThread.start();
         } catch (Exception W) {
 
         } finally {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.appropicatecosmetic.crawler.maihan;
+package com.appropicatecosmetic.crawler.mapleleaf;
 
 import com.appropicatecosmetic.crawler.BaseCrawler;
 import com.appropicatecosmetic.utils.ElementChecker;
@@ -25,13 +25,12 @@ import javax.xml.stream.events.XMLEvent;
  *
  * @author PhuCV
  */
-public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable {
+public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnable {
 
     private String url;
     private String categoryName;
-    //protected 
 
-    public MaihanCategoriesPageCrawler(ServletContext context, String url, String categoryName) {
+    public MapleleafCategoryPageCrawler(ServletContext context, String url, String categoryName) {
         super(context);
         this.url = url;
         this.categoryName = categoryName;
@@ -52,7 +51,7 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
             document = TextUtils.refineHtml(document);
             List<String> modelLink = getModelLinks(document);
             for (String link : modelLink) {
-                System.out.println("Product: "+ url+" "+link);
+                System.out.println("Product: " + url + " http://mapleleafhangxachtay.com" + link);
                 //MaihanModelCrawler maihanModelCrawler = new //MaihanModelCrawler();
             }
         } catch (IOException | XMLStreamException e) {
@@ -64,13 +63,13 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
         String document = "";
         boolean isStart = false;
         while ((line = reader.readLine()) != null) {
-            if (!isStart && line.contains("<div class=\"row block_2\">")) {
+            if (!isStart && line.contains("<div class=\"collection-grid\">")) {
                 isStart = true;
             }
             if (isStart) {
                 document += line.trim();
             }
-            if (isStart && line.contains("<div class=\"row block_4\">")) {
+            if (isStart && line.contains("<div class=\"e-newletter\">")) {
                 break;
             }
         }
@@ -88,12 +87,12 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
             } catch (Exception e) {
                 break;
             }
-            
+
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "a")) {
                     String link = getHref(startElement);
-                    if (!link.contains("gio-hang")) {
+                    if (!link.contains("javascript")&&!isDuplicate(links, link)) {
                         links.add(link);
                     }
                 }
@@ -105,5 +104,13 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
     private String getHref(StartElement element) {
         Attribute href = element.getAttributeByName(new QName("href"));
         return href == null ? "" : href.getValue();
+    }
+    private boolean isDuplicate(List<String> list, String link){
+        for (String string : list) {
+            if (link.equals(string)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
