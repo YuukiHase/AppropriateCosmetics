@@ -6,6 +6,7 @@
 package com.appropicatecosmetic.crawler.maihan;
 
 import com.appropicatecosmetic.crawler.BaseCrawler;
+import com.appropicatecosmetic.crawler.BaseThread;
 import com.appropicatecosmetic.utils.ElementChecker;
 import com.appropicatecosmetic.utils.TextUtils;
 import java.io.BufferedReader;
@@ -52,10 +53,16 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
             document = TextUtils.refineHtml(document);
             List<String> modelLink = getModelLinks(document);
             for (String link : modelLink) {
-                System.out.println("Product: "+ url+" "+link);
-                //MaihanModelCrawler maihanModelCrawler = new //MaihanModelCrawler();
+                MaihanModelCrawler maihanModelCrawler = new MaihanModelCrawler(link, categoryName, getContext());
+                maihanModelCrawler.getModel();
             }
-        } catch (IOException | XMLStreamException e) {
+            synchronized (BaseThread.getInstance()) {
+                while (BaseThread.isSuspended()) {
+                    BaseThread.getInstance().wait();
+                }
+            }
+        } catch (IOException | XMLStreamException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -88,7 +95,7 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
             } catch (Exception e) {
                 break;
             }
-            
+
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "a")) {
