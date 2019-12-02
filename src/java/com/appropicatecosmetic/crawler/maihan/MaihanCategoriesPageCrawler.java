@@ -7,6 +7,11 @@ package com.appropicatecosmetic.crawler.maihan;
 
 import com.appropicatecosmetic.crawler.BaseCrawler;
 import com.appropicatecosmetic.crawler.BaseThread;
+import com.appropicatecosmetic.dao.CategoryDAO;
+import com.appropicatecosmetic.dao.ProductDAO;
+import com.appropicatecosmetic.dto.Model;
+import com.appropicatecosmetic.entity.TblCategory;
+import com.appropicatecosmetic.entity.TblProduct;
 import com.appropicatecosmetic.utils.ElementChecker;
 import com.appropicatecosmetic.utils.TextUtils;
 import java.io.BufferedReader;
@@ -54,7 +59,17 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
             List<String> modelLink = getModelLinks(document);
             for (String link : modelLink) {
                 MaihanModelCrawler maihanModelCrawler = new MaihanModelCrawler(link, categoryName, getContext());
-                maihanModelCrawler.getModel();
+                Model model = maihanModelCrawler.getModel();
+                
+                TblCategory category = CategoryDAO.getInstance()
+                        .saveCategoryWhileCrawling(model.getCategory());
+                
+                TblProduct product = new TblProduct(TextUtils.getUUID(),model.getName(),model.getPrice()
+                        ,model.getImageLink(),model.getProductLink()
+                        ,model.getDetail(),model.getOrigin(),model.getVolume()
+                        ,model.getConcerns(),model.getSkinTypes(),category);
+                ProductDAO.getInstance().saveProductWhileCrawling(product);
+                System.out.println(product.toString());
             }
             synchronized (BaseThread.getInstance()) {
                 while (BaseThread.isSuspended()) {

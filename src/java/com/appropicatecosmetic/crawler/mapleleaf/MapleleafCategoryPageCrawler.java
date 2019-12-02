@@ -6,6 +6,12 @@
 package com.appropicatecosmetic.crawler.mapleleaf;
 
 import com.appropicatecosmetic.crawler.BaseCrawler;
+import com.appropicatecosmetic.crawler.BaseThread;
+import com.appropicatecosmetic.dao.CategoryDAO;
+import com.appropicatecosmetic.dao.ProductDAO;
+import com.appropicatecosmetic.dto.Model;
+import com.appropicatecosmetic.entity.TblCategory;
+import com.appropicatecosmetic.entity.TblProduct;
 import com.appropicatecosmetic.utils.ElementChecker;
 import com.appropicatecosmetic.utils.TextUtils;
 import java.io.BufferedReader;
@@ -51,10 +57,25 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
             document = TextUtils.refineHtml(document);
             List<String> modelLink = getModelLinks(document);
             for (String link : modelLink) {
-                System.out.println("Product: " + url + " http://mapleleafhangxachtay.com" + link);
-                //MaihanModelCrawler maihanModelCrawler = new //MaihanModelCrawler();
+                MapleleafModelCrawler mapleleafModelCrawler = new MapleleafModelCrawler("http://mapleleafhangxachtay.com" + link, categoryName, getContext());
+                Model model = mapleleafModelCrawler.getModel();
+                
+                TblCategory category = CategoryDAO.getInstance()
+                        .saveCategoryWhileCrawling(model.getCategory());
+                
+                TblProduct product = new TblProduct(TextUtils.getUUID(),model.getName(),model.getPrice()
+                        ,model.getImageLink(),model.getProductLink()
+                        ,model.getDetail(),model.getOrigin(),model.getVolume()
+                        ,model.getConcerns(),model.getSkinTypes(),category);
+                ProductDAO.getInstance().saveProductWhileCrawling(product);
+                System.out.println(product.toString());
             }
-        } catch (IOException | XMLStreamException e) {
+            synchronized (BaseThread.getInstance()) {
+                while (BaseThread.isSuspended()) {
+                    BaseThread.getInstance().wait();
+                }
+            }
+        } catch (IOException | XMLStreamException | InterruptedException e) {
         }
     }
 
@@ -92,7 +113,7 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "a")) {
                     String link = getHref(startElement);
-                    if (!link.contains("javascript")&&!isDuplicate(links, link)) {
+                    if (!link.contains("javascript") && !isDuplicate(links, link)) {
                         links.add(link);
                     }
                 }
@@ -105,7 +126,8 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
         Attribute href = element.getAttributeByName(new QName("href"));
         return href == null ? "" : href.getValue();
     }
-    private boolean isDuplicate(List<String> list, String link){
+
+    private boolean isDuplicate(List<String> list, String link) {
         for (String string : list) {
             if (link.equals(string)) {
                 return true;

@@ -7,7 +7,11 @@ package com.appropicatecosmetic.crawler.maihan;
 
 import com.appropicatecosmetic.contants.SkinContaints;
 import com.appropicatecosmetic.crawler.BaseCrawler;
+import com.appropicatecosmetic.dao.ConcernDAO;
+import com.appropicatecosmetic.dao.SkinTypeDAO;
 import com.appropicatecosmetic.dto.Model;
+import com.appropicatecosmetic.entity.TblConcern;
+import com.appropicatecosmetic.entity.TblSkinType;
 import com.appropicatecosmetic.utils.ElementChecker;
 import com.appropicatecosmetic.utils.EscapseHTMLUtils;
 import com.appropicatecosmetic.utils.TextUtils;
@@ -30,16 +34,16 @@ import javax.xml.stream.events.XMLEvent;
  * @author PhuCV
  */
 public class MaihanModelCrawler extends BaseCrawler {
-    
+
     private String pageUrl;
     private String category;
-    
+
     public MaihanModelCrawler(String pageUrl, String category, ServletContext context) {
         super(context);
         this.pageUrl = pageUrl;
         this.category = category;
     }
-    
+
     public Model getModel() {
         BufferedReader reader = null;
         Model model = null;
@@ -51,12 +55,12 @@ public class MaihanModelCrawler extends BaseCrawler {
         }
         return model;
     }
-    
+
     private Model stAXParserForModel(String document)
             throws XMLStreamException, UnsupportedEncodingException {
-        
+
         document = TextUtils.refineHtml(document);
-        
+
         String brand = getBrand(parseStringToXMLEventReader(document)).trim();
         String name = getName(parseStringToXMLEventReader(document), brand).trim();
         int price = getPrice(parseStringToXMLEventReader(document));
@@ -66,26 +70,28 @@ public class MaihanModelCrawler extends BaseCrawler {
         String orgin = getOrigin(parseStringToXMLEventReader(document)).trim();
         String volume = getVolume(parseStringToXMLEventReader(document)).trim();
         String skins = getSkinType(parseStringToXMLEventReader(document)).trim();
-        List<String> skinConcern = new ArrayList<>();
-        List<String> skinTypes = new ArrayList<>();
+
+        List<TblConcern> skinConcern = new ArrayList<>();
+        List<TblSkinType> skinTypes = new ArrayList<>();
         for (String concern : SkinContaints.LISTSKINCONSERN) {
-            if (detail1.toLowerCase().contains(concern.toLowerCase()) 
+            if (detail1.toLowerCase().contains(concern.toLowerCase())
                     || detail2.toLowerCase().contains(concern.toLowerCase())) {
-                skinConcern.add(concern);
+                TblConcern concern1 = ConcernDAO.getInstance().getAndInsertIfNewConsern(concern);
+                skinConcern.add(concern1);
             }
         }
-        
         for (String skin : SkinContaints.LISTSKINTYPES) {
-            if (detail1.toLowerCase().contains(skin.toLowerCase()) 
+            if (detail1.toLowerCase().contains(skin.toLowerCase())
                     || detail2.toLowerCase().contains(skin.toLowerCase())
                     || skins.toLowerCase().contains(skin.toLowerCase())) {
-                skinTypes.add(skin);
+                TblSkinType skinType = SkinTypeDAO.getInstance().getAndInsertIfNewSkinType(skin);
+                skinTypes.add(skinType);
             }
         }
-        Model model = new Model(brand, name, category, price, link, pageUrl, detail1, orgin, volume, skinTypes, skinConcern);        
+        Model model = new Model(brand, name, category, price, link, pageUrl, detail1, orgin, volume, skinTypes, skinConcern);
         return model;
     }
-    
+
     private String getModelDocument(BufferedReader reader) throws IOException {
         String document = "<model>";
         String line = "";
@@ -137,7 +143,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         }
         return EscapseHTMLUtils.encodeHtml(document);
     }
-    
+
     private String getBrand(XMLEventReader eventReader) {
         XMLEvent event = null;
         String brand = "";
@@ -147,7 +153,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             } catch (Exception e) {
                 break;
             }
-            
+
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "li", "class", "li")) {
@@ -159,7 +165,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         }
         return brand;
     }
-    
+
     private String getName(XMLEventReader eventReader, String brand) {
         XMLEvent event = null;
         String name = "";
@@ -169,7 +175,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             } catch (Exception e) {
                 break;
             }
-            
+
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "h1", "class", "text_1")) {
@@ -184,7 +190,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         }
         return name;
     }
-    
+
     private int getPrice(XMLEventReader eventReader) {
         XMLEvent event = null;
         String price = "0";
@@ -194,7 +200,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             } catch (Exception e) {
                 break;
             }
-            
+
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "span", "class", "text_5") || ElementChecker.isElementWith(startElement, "span", "class", "text_5 xxx")) {
@@ -207,7 +213,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         }
         return Integer.parseInt(price);
     }
-    
+
     private String getImageLink(XMLEventReader eventReader) {
         XMLEvent event = null;
         String link = "";
@@ -223,19 +229,16 @@ public class MaihanModelCrawler extends BaseCrawler {
                     link = getHref(startElement);
                     return link;
                 }
-                if (ElementChecker.isElementWith(startElement, "img")) {
-                    link = getHref(startElement);
-                }
             }
         }
         return link;
     }
-    
+
     private String getHref(StartElement element) {
         Attribute href = element.getAttributeByName(new QName("src"));
         return href == null ? "" : href.getValue();
     }
-    
+
     private String getDetail2(XMLEventReader eventReader) {
         XMLEvent event = null;
         String data = "";
@@ -251,7 +254,7 @@ public class MaihanModelCrawler extends BaseCrawler {
                 if (ElementChecker.isElementWith(startElement, "div", "class", "top_3")) {
                     isStart = true;
                 }
-                
+
             }
             if (isStart && event.isCharacters()) {
                 data += " " + event;
@@ -259,7 +262,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         }
         return data;
     }
-    
+
     private String getDetail1(XMLEventReader eventReader) {
         XMLEvent event = null;
         String data = "";
@@ -283,7 +286,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         }
         return data;
     }
-    
+
     private String getOrigin(XMLEventReader eventReader) {
         XMLEvent event = null;
         String data = "";
@@ -307,7 +310,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         }
         return data;
     }
-    
+
     private String getVolume(XMLEventReader eventReader) {
         XMLEvent event = null;
         String data = "";
@@ -331,7 +334,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         }
         return data;
     }
-    
+
     private String getSkinType(XMLEventReader eventReader) {
         XMLEvent event = null;
         String data = "";

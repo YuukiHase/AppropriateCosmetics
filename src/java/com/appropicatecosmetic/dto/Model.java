@@ -5,6 +5,8 @@
  */
 package com.appropicatecosmetic.dto;
 
+import com.appropicatecosmetic.entity.TblConcern;
+import com.appropicatecosmetic.entity.TblSkinType;
 import java.io.Serializable;
 import java.util.List;
 
@@ -23,10 +25,10 @@ public class Model implements Serializable {
     protected String detail;
     protected String origin;
     protected String volume;
-    protected List<String> skinTypes;
-    protected List<String> concerns;
+    protected List<TblSkinType> skinTypes;
+    protected List<TblConcern> concerns;
 
-    public Model(String brand, String name, String category, int price, String imageLink, String productLink, String detail, String origin, String volume, List<String> skinTypes, List<String> conserns) {
+    public Model(String brand, String name, String category, int price, String imageLink, String productLink, String detail, String origin, String volume, List<TblSkinType> skinTypes, List<TblConcern> concerns) {
         this.brand = brand;
         this.name = name;
         this.category = category;
@@ -37,7 +39,7 @@ public class Model implements Serializable {
         this.origin = origin;
         this.volume = volume;
         this.skinTypes = skinTypes;
-        this.concerns = conserns;
+        this.concerns = concerns;
     }
 
     public String getBrand() {
@@ -112,19 +114,20 @@ public class Model implements Serializable {
         this.volume = volume;
     }
 
-    public List<String> getSkinTypes() {
+    public List<TblSkinType> getSkinTypes() {
         return skinTypes;
     }
 
-    public void setSkinTypes(List<String> skinTypes) {
+    public void setSkinTypes(List<TblSkinType> skinTypes) {
         this.skinTypes = skinTypes;
     }
 
-    public List<String> getConcerns() {
+    public List<TblConcern> getConcerns() {
         return concerns;
     }
 
-    public void setConcerns(List<String> concerns) {
+    public void setConcerns(List<TblConcern> concerns) {
         this.concerns = concerns;
     }
+
 }

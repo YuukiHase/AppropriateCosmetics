@@ -20,7 +20,10 @@ public class SkinContaints {
         // loai da
         LISTSKINTYPES.add("Da nhạy cảm");
         LISTSKINTYPES.add("Mọi loại da");
+        
         LISTSKINTYPES.add("Da dầu");
+        LISTSKINTYPES.add("Da nhờn");
+        
         LISTSKINTYPES.add("Da khô");
         LISTSKINTYPES.add("Da hỗn hợp");
         
@@ -41,6 +44,7 @@ public class SkinContaints {
         LISTSKINCONSERN.add("sậm màu");
         
         LISTSKINCONSERN.add("mẩn đỏ");
+        LISTSKINCONSERN.add("rám nắng");
     }
 
     public SkinContaints() {
