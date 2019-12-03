@@ -11,8 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -40,10 +38,7 @@ public class TblSkinType implements Serializable {
     private String skinTypeId;
     @Column(name = "skinTypeName", length = 2147483647)
     private String skinTypeName;
-    @JoinTable(name = "MappingUserSkinType", joinColumns = {
-        @JoinColumn(name = "skinTypeId", referencedColumnName = "skinTypeId", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)})
-    @ManyToMany
+    @ManyToMany(mappedBy = "tblSkinTypeCollection")
     private Collection<TblUser> tblUserCollection;
     @ManyToMany(mappedBy = "tblSkinTypeCollection")
     private Collection<TblProduct> tblProductCollection;
@@ -113,5 +108,5 @@ public class TblSkinType implements Serializable {
     public String toString() {
         return "com.appropicatecosmetic.entity.TblSkinType[ skinTypeId=" + skinTypeId + " ]";
     }
-    
+
 }

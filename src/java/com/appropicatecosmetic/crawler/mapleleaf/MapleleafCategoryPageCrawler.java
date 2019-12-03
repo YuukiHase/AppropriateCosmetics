@@ -56,19 +56,20 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
             String document = getModelListDocument(reader);
             document = TextUtils.refineHtml(document);
             List<String> modelLink = getModelLinks(document);
+            System.out.println("2:"+ categoryName + " " + modelLink.size());
             for (String link : modelLink) {
                 MapleleafModelCrawler mapleleafModelCrawler = new MapleleafModelCrawler("http://mapleleafhangxachtay.com" + link, categoryName, getContext());
                 Model model = mapleleafModelCrawler.getModel();
-                
+
                 TblCategory category = CategoryDAO.getInstance()
                         .saveCategoryWhileCrawling(model.getCategory());
-                
-                TblProduct product = new TblProduct(TextUtils.getUUID(),model.getName(),model.getPrice()
-                        ,model.getImageLink(),model.getProductLink()
-                        ,model.getDetail(),model.getOrigin(),model.getVolume()
-                        ,model.getConcerns(),model.getSkinTypes(),category);
+
+                TblProduct product = new TblProduct(TextUtils.getUUID(), model.getName(), model.getPrice(),
+                        model.getImageLink(), model.getProductLink(),
+                        model.getDetail(), model.getOrigin(), model.getVolume(),
+                        model.getConcerns(), model.getSkinTypes(), category);
                 ProductDAO.getInstance().saveProductWhileCrawling(product);
-                System.out.println(product.toString());
+                //System.out.println(product.getProductLink());
             }
             synchronized (BaseThread.getInstance()) {
                 while (BaseThread.isSuspended()) {
@@ -76,6 +77,7 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
                 }
             }
         } catch (IOException | XMLStreamException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -106,6 +108,7 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
 

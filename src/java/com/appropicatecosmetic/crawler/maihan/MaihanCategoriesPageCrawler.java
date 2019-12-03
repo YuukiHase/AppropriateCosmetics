@@ -57,19 +57,20 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
             String document = getModelListDocument(reader);
             document = TextUtils.refineHtml(document);
             List<String> modelLink = getModelLinks(document);
+            System.out.println("1:"+ categoryName + " " + modelLink.size());
             for (String link : modelLink) {
                 MaihanModelCrawler maihanModelCrawler = new MaihanModelCrawler(link, categoryName, getContext());
                 Model model = maihanModelCrawler.getModel();
-                
+
                 TblCategory category = CategoryDAO.getInstance()
                         .saveCategoryWhileCrawling(model.getCategory());
-                
-                TblProduct product = new TblProduct(TextUtils.getUUID(),model.getName(),model.getPrice()
-                        ,model.getImageLink(),model.getProductLink()
-                        ,model.getDetail(),model.getOrigin(),model.getVolume()
-                        ,model.getConcerns(),model.getSkinTypes(),category);
+
+                TblProduct product = new TblProduct(TextUtils.getUUID(), model.getName(), model.getPrice(),
+                         model.getImageLink(), model.getProductLink(),
+                         model.getDetail(), model.getOrigin(), model.getVolume(),
+                         model.getConcerns(), model.getSkinTypes(), category);
                 ProductDAO.getInstance().saveProductWhileCrawling(product);
-                System.out.println(product.toString());
+                //System.out.println(product.getProductLink());
             }
             synchronized (BaseThread.getInstance()) {
                 while (BaseThread.isSuspended()) {

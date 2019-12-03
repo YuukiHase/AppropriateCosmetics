@@ -25,7 +25,6 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
-import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
@@ -52,6 +51,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
             String document = getModelDocument(reader);
             return stAXParserForModel(document);
         } catch (IOException | XMLStreamException ex) {
+            ex.printStackTrace();
         }
         return model;
     }
@@ -62,7 +62,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
         String brand = getBrand(parseStringToXMLEventReader(document)).trim();
         String name = getName(parseStringToXMLEventReader(document), brand).trim();
         int price = getPrice(parseStringToXMLEventReader(document));
-        String link = getImageLink(parseStringToXMLEventReader(document));
+        String link = "http:" + getImageLink(parseStringToXMLEventReader(document));
         String detail = getDetail(parseStringToXMLEventReader(document));
         String volume = getVolume(name);
 
@@ -82,7 +82,10 @@ public class MapleleafModelCrawler extends BaseCrawler {
                 skinTypes.add(skinType);
             }
         }
-        Model model = new Model(brand, name.replace(volume, "\b"), category, price, link, pageUrl, detail, "", volume, skinTypes, skinConcern);
+        if (name.contains(volume)) {
+            name = name.replace(volume, "").trim();
+        }
+        Model model = new Model(brand, name, category, price, link, pageUrl, detail, "Chưa Xác Định", volume, skinTypes, skinConcern);
         return model;
     }
 
@@ -113,6 +116,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
 
@@ -134,6 +138,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
 
@@ -143,7 +148,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
                     XMLEvent value = (XMLEvent) eventReader.next();
                     name = value.asCharacters().getData();
                     if (name.contains(brand)) {
-                        name = name.replace(brand, "\b");
+                        name = name.replace(brand, "");
                     }
                     return name;
                 }
@@ -159,6 +164,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
 
@@ -183,6 +189,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
             if (event.isStartElement()) {
@@ -209,6 +216,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
             if (event.isStartElement()) {
@@ -230,7 +238,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
     }
 
     private String getVolume(String name) {
-        String data = "";
+        String data = "Chưa Xác Định";
         String[] a = name.split(" ");
         for (int i = 0; i < a.length; i++) {
             if (a[i].contains("ml")) {

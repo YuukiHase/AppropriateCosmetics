@@ -32,7 +32,7 @@ public class MapleleafThread extends BaseThread implements Runnable {
                 MapleleafCategoriesCrawler categoriesCrawler = new MapleleafCategoriesCrawler(context);
                 Map<String, String> categories = categoriesCrawler.getCategories("http://mapleleafhangxachtay.com/");//todo
                 for (Map.Entry<String, String> entry : categories.entrySet()) {
-                    System.out.println("category: http://mapleleafhangxachtay.com" + entry.getKey() + " " + entry.getValue());
+                    //System.out.println("category: http://mapleleafhangxachtay.com" + entry.getKey() + " " + entry.getValue());
                     Thread crawlingThread = new Thread(
                             new MapleleafCategoryPageCrawler(context, "http://mapleleafhangxachtay.com" + entry.getKey(), entry.getValue()));
                     crawlingThread.start();

@@ -52,6 +52,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             String document = getModelDocument(reader);
             return stAXParserForModel(document);
         } catch (IOException | XMLStreamException ex) {
+            ex.printStackTrace();
         }
         return model;
     }
@@ -151,6 +152,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
 
@@ -173,6 +175,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
 
@@ -182,7 +185,7 @@ public class MaihanModelCrawler extends BaseCrawler {
                     XMLEvent value = (XMLEvent) eventReader.next();
                     name = value.asCharacters().getData();
                     if (name.contains(brand)) {
-                        name = name.replace(brand, "\b");
+                        name = name.replace(" " + brand, "");
                     }
                     return name;
                 }
@@ -198,6 +201,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
 
@@ -221,6 +225,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
             if (event.isStartElement()) {
@@ -247,6 +252,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
             if (event.isStartElement()) {
@@ -270,6 +276,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
             if (event.isStartElement()) {
@@ -294,6 +301,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
             if (event.isCharacters()) {
@@ -318,6 +326,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
             if (event.isCharacters()) {
@@ -342,6 +351,7 @@ public class MaihanModelCrawler extends BaseCrawler {
             try {
                 event = (XMLEvent) eventReader.next();
             } catch (Exception e) {
+                e.printStackTrace();
                 break;
             }
             if (event.isCharacters()) {

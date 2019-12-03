@@ -11,8 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -40,15 +38,9 @@ public class TblConcern implements Serializable {
     private String concernId;
     @Column(name = "concernName", length = 2147483647)
     private String concernName;
-    @JoinTable(name = "MappingProductConcern", joinColumns = {
-        @JoinColumn(name = "concernId", referencedColumnName = "concernId", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "productId", referencedColumnName = "productId", nullable = false)})
-    @ManyToMany
+    @ManyToMany(mappedBy = "tblConcernCollection")
     private Collection<TblProduct> tblProductCollection;
-    @JoinTable(name = "MappingUserConcern", joinColumns = {
-        @JoinColumn(name = "concernId", referencedColumnName = "concernId", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)})
-    @ManyToMany
+    @ManyToMany(mappedBy = "tblConcernCollection")
     private Collection<TblUser> tblUserCollection;
 
     public TblConcern() {

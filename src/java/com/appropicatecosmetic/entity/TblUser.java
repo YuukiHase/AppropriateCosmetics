@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -42,9 +44,15 @@ public class TblUser implements Serializable {
     private String fullName;
     @Column(name = "password", length = 2147483647)
     private String password;
-    @ManyToMany(mappedBy = "tblUserCollection")
+    @JoinTable(name = "MappingUserConcern", joinColumns = {
+        @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "concernId", referencedColumnName = "concernId", nullable = false)})
+    @ManyToMany
     private Collection<TblConcern> tblConcernCollection;
-    @ManyToMany(mappedBy = "tblUserCollection")
+    @JoinTable(name = "MappingUserSkinType", joinColumns = {
+        @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "skinTypeId", referencedColumnName = "skinTypeId", nullable = false)})
+    @ManyToMany
     private Collection<TblSkinType> tblSkinTypeCollection;
     @OneToMany(mappedBy = "userId")
     private Collection<TblRecommand> tblRecommandCollection;
@@ -131,5 +139,5 @@ public class TblUser implements Serializable {
     public String toString() {
         return "com.appropicatecosmetic.entity.TblUser[ userId=" + userId + " ]";
     }
-    
+
 }

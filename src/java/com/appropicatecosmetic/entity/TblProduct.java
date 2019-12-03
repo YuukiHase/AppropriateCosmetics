@@ -61,7 +61,10 @@ public class TblProduct implements Serializable {
     private String origin;
     @Column(name = "volume", length = 2147483647)
     private String volume;
-    @ManyToMany(mappedBy = "tblProductCollection")
+    @JoinTable(name = "MappingProductConcern", joinColumns = {
+        @JoinColumn(name = "productId", referencedColumnName = "productId", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "concernId", referencedColumnName = "concernId", nullable = false)})
+    @ManyToMany
     private Collection<TblConcern> tblConcernCollection;
     @JoinTable(name = "MappingProductSkinType", joinColumns = {
         @JoinColumn(name = "productId", referencedColumnName = "productId", nullable = false)}, inverseJoinColumns = {
