@@ -46,4 +46,83 @@ public class XmlDAO {
         }
         return result;
     }
+    public String getListConcern() throws SQLException, Exception {
+        Connection con = null;
+        PreparedStatement stm = null;
+        String result = "";
+        try {
+            con = DBUtils.getMyConnection();
+            if (con != null) {
+                String sql = "select cast((select concernId,concernName from tblConcern"
+                        + " for XML Path('concern'), Root('concerns'))as NVARCHAR(max)) as XmlData";
+                stm = con.prepareStatement(sql);
+                try (ResultSet rs = stm.executeQuery()) {
+                    if (rs.next()) {
+                        result += rs.getString("XmlData");
+                    }
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+    
+    public String getListSkinType() throws SQLException, Exception {
+        Connection con = null;
+        PreparedStatement stm = null;
+        String result = "";
+        try {
+            con = DBUtils.getMyConnection();
+            if (con != null) {
+                String sql = "select cast((select skinTypeId,skinTypeName from tblSkinType "
+                        + "for XML Path('skintype'), Root('skintypes'))as NVARCHAR(max)) as XmlData";
+                stm = con.prepareStatement(sql);
+                try (ResultSet rs = stm.executeQuery()) {
+                    if (rs.next()) {
+                        result += rs.getString("XmlData");
+                    }
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+    public String getListCategory() throws SQLException, Exception {
+        Connection con = null;
+        PreparedStatement stm = null;
+        String result = "";
+        try {
+            con = DBUtils.getMyConnection();
+            if (con != null) {
+                String sql = "select cast((select categoryId,categoryName from tblCategory"
+                        + " for XML Path('category'), Root('categories'))as NVARCHAR(max)) as XmlData";
+                stm = con.prepareStatement(sql);
+                try (ResultSet rs = stm.executeQuery()) {
+                    if (rs.next()) {
+                        result += rs.getString("XmlData");
+                    }
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
 }

@@ -45,16 +45,23 @@ public class HomeServlet extends HttpServlet {
                 userId = UserDAO.getInstance().checkDefaultUser().getUserId();
             }
             XmlDAO xmlDAO = new XmlDAO();
+            String concernList = xmlDAO.getListConcern();
+            String skintypeList = xmlDAO.getListSkinType();
+            String categoryList = xmlDAO.getListCategory();
             String result = xmlDAO.getHomeRecommend(userId);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(new InputSource(new StringReader(result)));
+            Document docConcern = db.parse(new InputSource(new StringReader(concernList)));
+            Document docSkintype = db.parse(new InputSource(new StringReader(skintypeList)));
+            Document docCategory = db.parse(new InputSource(new StringReader(categoryList)));
             session.setAttribute("HOMERECOMMENDDOC", doc);
-        }catch (Exception e) {
-        } finally {
+            session.setAttribute("CONCERNSLIST", docConcern);
+            session.setAttribute("SKINTYPELIST", docSkintype);
+            session.setAttribute("CATEGORYLIST", docCategory);
             request.getRequestDispatcher("index.jsp").forward(request, response);
+        } catch (Exception e) {
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
