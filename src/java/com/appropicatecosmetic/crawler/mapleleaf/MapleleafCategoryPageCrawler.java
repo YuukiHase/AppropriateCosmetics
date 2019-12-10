@@ -44,19 +44,13 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
 
     @Override
     public void run() {
-        //        Category category = createCategory(categoryName);
-        //        if (category == null) {
-        //            Logger.getLogger(MaihanCategoriesPageCrawler.class.getName())
-        //                    .log(Level.SEVERE, null, new Exception("Error: category null"));
-        //            return;
-        //        }
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
             String document = getModelListDocument(reader);
             document = TextUtils.refineHtml(document);
             List<String> modelLink = getModelLinks(document);
-            System.out.println("2:"+ categoryName + " " + modelLink.size());
+            System.out.println("2:" + categoryName + " " + modelLink.size());
             for (String link : modelLink) {
                 MapleleafModelCrawler mapleleafModelCrawler = new MapleleafModelCrawler("http://mapleleafhangxachtay.com" + link, categoryName, getContext());
                 Model model = mapleleafModelCrawler.getModel();
@@ -66,7 +60,7 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
 
                 TblProduct product = new TblProduct(TextUtils.getUUID(), model.getName(), model.getPrice(),
                         model.getImageLink(), model.getProductLink(),
-                        model.getDetail(), model.getOrigin(), model.getVolume(),
+                        model.getDetail(), model.getOrigin(), model.getVolume(),model.getBrand(),
                         model.getConcerns(), model.getSkinTypes(), category);
                 ProductDAO.getInstance().saveProductWhileCrawling(product);
                 //System.out.println(product.getProductLink());
@@ -89,11 +83,11 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
             if (!isStart && line.contains("<div class=\"collection-grid\">")) {
                 isStart = true;
             }
-            if (isStart) {
-                document += line.trim();
-            }
             if (isStart && line.contains("<div class=\"e-newletter\">")) {
                 break;
+            }
+            if (isStart) {
+                document += line.trim();
             }
         }
         return document;
@@ -105,13 +99,7 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
         XMLEvent event = null;
         List<String> links = new ArrayList<>();
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
-
+            event = (XMLEvent) eventReader.next();
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "a")) {

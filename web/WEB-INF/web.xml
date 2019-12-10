@@ -4,13 +4,24 @@
         <servlet-name>CrawlServlet</servlet-name>
         <servlet-class>com.appropicatecosmetic.servlet.CrawlServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>com.appropicatecosmetic.servlet.HomeServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CrawlServlet</servlet-name>
         <url-pattern>/CrawlServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/HomeServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <welcome-file-list>
+        <welcome-file>HomeServlet</welcome-file>
+    </welcome-file-list>
 </web-app>

@@ -67,7 +67,7 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
 
                 TblProduct product = new TblProduct(TextUtils.getUUID(), model.getName(), model.getPrice(),
                          model.getImageLink(), model.getProductLink(),
-                         model.getDetail(), model.getOrigin(), model.getVolume(),
+                         model.getDetail(), model.getOrigin(), model.getVolume(),model.getBrand(),
                          model.getConcerns(), model.getSkinTypes(), category);
                 ProductDAO.getInstance().saveProductWhileCrawling(product);
                 //System.out.println(product.getProductLink());

@@ -7,6 +7,7 @@ package com.appropicatecosmetic.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -36,12 +37,12 @@ public class TblRecommand implements Serializable {
     @Column(name = "recommandId", nullable = false, length = 36)
     private String recommandId;
     @Column(name = "productPoint")
-    private Integer productPoint;
+    private Double productPoint;
     @JoinColumn(name = "productId", referencedColumnName = "productId")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private TblProduct productId;
     @JoinColumn(name = "userId", referencedColumnName = "userId")
-    @ManyToOne
+    @ManyToOne(optional = false,cascade = CascadeType.REMOVE)
     private TblUser userId;
 
     public TblRecommand() {
@@ -59,11 +60,11 @@ public class TblRecommand implements Serializable {
         this.recommandId = recommandId;
     }
 
-    public Integer getProductPoint() {
+    public Double getProductPoint() {
         return productPoint;
     }
 
-    public void setProductPoint(Integer productPoint) {
+    public void setProductPoint(Double productPoint) {
         this.productPoint = productPoint;
     }
 

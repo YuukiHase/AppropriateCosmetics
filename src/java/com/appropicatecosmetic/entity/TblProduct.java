@@ -7,7 +7,6 @@ package com.appropicatecosmetic.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,6 +60,8 @@ public class TblProduct implements Serializable {
     private String origin;
     @Column(name = "volume", length = 2147483647)
     private String volume;
+    @Column(name = "brand", length = 2147483647)
+    private String brand;
     @JoinTable(name = "MappingProductConcern", joinColumns = {
         @JoinColumn(name = "productId", referencedColumnName = "productId", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "concernId", referencedColumnName = "concernId", nullable = false)})
@@ -80,7 +81,7 @@ public class TblProduct implements Serializable {
     public TblProduct() {
     }
 
-    public TblProduct(String productId, String name, Integer price, String imageLink, String productLink, String detail, String origin, String volume, Collection<TblConcern> tblConcernCollection, Collection<TblSkinType> tblSkinTypeCollection, TblCategory categoryId) {
+    public TblProduct(String productId, String name, Integer price, String imageLink, String productLink, String detail, String origin, String volume, String brand, Collection<TblConcern> tblConcernCollection, Collection<TblSkinType> tblSkinTypeCollection, TblCategory categoryId) {
         this.productId = productId;
         this.name = name;
         this.price = price;
@@ -89,12 +90,11 @@ public class TblProduct implements Serializable {
         this.detail = detail;
         this.origin = origin;
         this.volume = volume;
+        this.brand = brand;
         this.tblConcernCollection = tblConcernCollection;
         this.tblSkinTypeCollection = tblSkinTypeCollection;
         this.categoryId = categoryId;
     }
-
-    
 
     public TblProduct(String productId) {
         this.productId = productId;
@@ -164,6 +164,14 @@ public class TblProduct implements Serializable {
         this.volume = volume;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
     @XmlTransient
     public Collection<TblConcern> getTblConcernCollection() {
         return tblConcernCollection;
@@ -213,7 +221,14 @@ public class TblProduct implements Serializable {
             return false;
         }
         TblProduct other = (TblProduct) object;
-        if (this.productId != null || (other.productId == null && (this.productId == null || this.productId.equals(other.productId)) && this.name.equals(other.name) && Objects.equals(this.price, other.price) && this.imageLink.equals(other.imageLink) && this.productLink.equals(other.name) && this.detail.equals(other.detail) && this.origin.equals(other.origin) && this.volume.equals(other.volume))) {
+        if ( //this.productId.equals(other.productId)
+                this.name.equals(other.name)
+                && this.price == other.price
+                && this.imageLink.equals(other.imageLink)
+                && this.productLink.equals(other.productLink)
+                && this.detail.equals(other.detail)
+                && this.origin.equals(other.origin)
+                && this.volume.equals(other.volume)) {
             return true;
         } else {
             return false;

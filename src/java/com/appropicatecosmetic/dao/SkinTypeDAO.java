@@ -5,13 +5,11 @@
  */
 package com.appropicatecosmetic.dao;
 
-import com.appropicatecosmetic.entity.TblConcern;
 import com.appropicatecosmetic.entity.TblSkinType;
 import com.appropicatecosmetic.utils.DBUtils;
 import com.appropicatecosmetic.utils.TextUtils;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 
 /**
  *
