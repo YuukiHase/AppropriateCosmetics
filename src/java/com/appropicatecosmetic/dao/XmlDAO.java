@@ -24,10 +24,10 @@ public class XmlDAO {
         try {
             con = DBUtils.getMyConnection();
             if (con != null) {
-                String sql = "select CAST(( select p.productId,p.name,p.price,imageLink,brand,categoryName" +
-"				from tblProduct p, tblRecommand r ,tblCategory c" +
-"				where p.productId=r.productId and p.categoryId = c.categoryId and r.userId = ? " +
-"				order by r.productPoint desc for XML Path('product'), Root('products')) as NVARCHAR(max) ) AS XmlData";
+                String sql = "select CAST(( select p.productId,p.name,p.price,imageLink,brand,categoryName"
+                        + " from tblProduct p, tblRecommand r ,tblCategory c"
+                        + " where p.productId=r.productId and p.categoryId = c.categoryId and r.userId = ? "
+                        + " order by r.productPoint desc for XML Path('product'), Root('products')) as NVARCHAR(max) ) AS XmlData";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, userId);
                 try (ResultSet rs = stm.executeQuery()) {
@@ -46,6 +46,7 @@ public class XmlDAO {
         }
         return result;
     }
+
     public String getListConcern() throws SQLException, Exception {
         Connection con = null;
         PreparedStatement stm = null;
@@ -72,7 +73,7 @@ public class XmlDAO {
         }
         return result;
     }
-    
+
     public String getListSkinType() throws SQLException, Exception {
         Connection con = null;
         PreparedStatement stm = null;
@@ -99,6 +100,7 @@ public class XmlDAO {
         }
         return result;
     }
+
     public String getListCategory() throws SQLException, Exception {
         Connection con = null;
         PreparedStatement stm = null;
@@ -109,6 +111,98 @@ public class XmlDAO {
                 String sql = "select cast((select categoryId,categoryName from tblCategory"
                         + " for XML Path('category'), Root('categories'))as NVARCHAR(max)) as XmlData";
                 stm = con.prepareStatement(sql);
+                try (ResultSet rs = stm.executeQuery()) {
+                    if (rs.next()) {
+                        result += rs.getString("XmlData");
+                    }
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+
+    public String getPageWithCategoryRecommend(String userId, String categoryId) throws SQLException, Exception {
+        Connection con = null;
+        PreparedStatement stm = null;
+        String result = "";
+        try {
+            con = DBUtils.getMyConnection();
+            if (con != null) {
+                String sql = "select CAST(( select p.productId,p.name,p.price,imageLink,brand,categoryName"
+                        + " from tblProduct p, tblRecommand r ,tblCategory c"
+                        + " where p.productId=r.productId and p.categoryId = c.categoryId and r.userId = ? and c.categoryId = ?"
+                        + " order by r.productPoint desc for XML Path('product'), Root('products')) as NVARCHAR(max) ) AS XmlData";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, userId);
+                stm.setString(2, categoryId);
+                try (ResultSet rs = stm.executeQuery()) {
+                    if (rs.next()) {
+                        result += rs.getString("XmlData");
+                    }
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+
+    public String getPageWithConcernRecommend(String userId, String concernId) throws SQLException, Exception {
+        Connection con = null;
+        PreparedStatement stm = null;
+        String result = "";
+        try {
+            con = DBUtils.getMyConnection();
+            if (con != null) {
+                String sql = "select CAST(( select p.productId,p.name,p.price,imageLink,brand,categoryName"
+                        + " from tblProduct p, tblRecommand r ,tblCategory c,MappingProductConcern mc"
+                        + " where p.productId=r.productId and p.categoryId = c.categoryId and p.productId =mc.productId and r.userId = ? and mc.concernId= ?"
+                        + " order by r.productPoint desc for XML Path('product'), Root('products')) as NVARCHAR(max) ) AS XmlData";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, userId);
+                stm.setString(2, concernId);
+                try (ResultSet rs = stm.executeQuery()) {
+                    if (rs.next()) {
+                        result += rs.getString("XmlData");
+                    }
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return result;
+    }
+    public String getPageWithSkintypeRecommend(String userId, String skinTypeId) throws SQLException, Exception {
+        Connection con = null;
+        PreparedStatement stm = null;
+        String result = "";
+        try {
+            con = DBUtils.getMyConnection();
+            if (con != null) {
+                String sql = "select CAST(( select p.productId,p.name,p.price,imageLink,brand,categoryName"
+                        + " from tblProduct p, tblRecommand r ,tblCategory c,MappingProductSkinType mc"
+                        + " where p.productId=r.productId and p.categoryId = c.categoryId and p.productId =mc.productId and r.userId = ? and mc.skinTypeId= ?"
+                        + " order by r.productPoint desc for XML Path('product'), Root('products')) as NVARCHAR(max) ) AS XmlData";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, userId);
+                stm.setString(2, skinTypeId);
                 try (ResultSet rs = stm.executeQuery()) {
                     if (rs.next()) {
                         result += rs.getString("XmlData");

@@ -5,27 +5,31 @@
  */
 package com.appropicatecosmetic.servlet;
 
+import com.appropicatecosmetic.dao.ConcernDAO;
+import com.appropicatecosmetic.dao.ProductDAO;
+import com.appropicatecosmetic.dao.RecommanDAO;
+import com.appropicatecosmetic.dao.SkinTypeDAO;
 import com.appropicatecosmetic.dao.UserDAO;
-import com.appropicatecosmetic.dao.XmlDAO;
+import com.appropicatecosmetic.entity.TblConcern;
+import com.appropicatecosmetic.entity.TblProduct;
+import com.appropicatecosmetic.entity.TblRecommand;
+import com.appropicatecosmetic.entity.TblSkinType;
 import com.appropicatecosmetic.entity.TblUser;
+import com.appropicatecosmetic.utils.TextUtils;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
 /**
  *
  * @author Admin
  */
-public class HomeServlet extends HttpServlet {
+public class SurveyServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,35 +43,33 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try {
+            String skintype = request.getParameter("skintype");
+            String[] listConcern = request.getParameterValues("concern");
+            String limit = request.getParameter("limit");
+
+            List<TblSkinType> listSkintypes = new ArrayList();
+            listSkintypes.add(SkinTypeDAO.getInstance().getSkinTypeById(skintype));
+
+            List<TblConcern> listConcerns = new ArrayList();
+            for (String concern : listConcern) {
+                TblConcern tblconcern = ConcernDAO.getInstance().getConcernByID(concern);
+                listConcerns.add(tblconcern);
+            }
             HttpSession session = request.getSession();
             String userId = (String) session.getAttribute("USERID");
-            if (userId == null) {
-                userId = UserDAO.getInstance().checkDefaultUser().getUserId();
-            } else {
-                TblUser user = UserDAO.getInstance().getUserById(userId);
-                if (user.getTblConcernCollection().isEmpty() && user.getTblSkinTypeCollection().isEmpty()) {
-                    userId = UserDAO.getInstance().checkDefaultUser().getUserId();
-                }
+            TblUser user = UserDAO.getInstance().getUserById(userId);
+            user.setTblConcernCollection(listConcerns);
+            user.setTblSkinTypeCollection(listSkintypes);
+            UserDAO.getInstance().update(user);
+
+            List<TblProduct> listProduct = ProductDAO.getInstance().getAll("TblProduct.findAll");
+            for (TblProduct tblProduct : listProduct) {
+                double point = ProductDAO.getInstance().calculatePointForUser(tblProduct, user);
+                RecommanDAO.getInstance().insertAndUpdateRecomand(tblProduct, user, point);
             }
-            XmlDAO xmlDAO = new XmlDAO();
-            String concernList = xmlDAO.getListConcern();
-            String skintypeList = xmlDAO.getListSkinType();
-            String categoryList = xmlDAO.getListCategory();
-            String result = xmlDAO.getHomeRecommend(userId);
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new InputSource(new StringReader(result)));
-            Document docConcern = db.parse(new InputSource(new StringReader(concernList)));
-            Document docSkintype = db.parse(new InputSource(new StringReader(skintypeList)));
-            Document docCategory = db.parse(new InputSource(new StringReader(categoryList)));
-            session.setAttribute("HOMERECOMMENDDOC", doc);
-            session.setAttribute("CONCERNSLIST", docConcern);
-            session.setAttribute("SKINTYPELIST", docSkintype);
-            session.setAttribute("CATEGORYLIST", docCategory);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("HomeServlet").forward(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

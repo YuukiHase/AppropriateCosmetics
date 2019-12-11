@@ -1,8 +1,9 @@
 <%-- 
-    Document   : index
-    Created on : Nov 15, 2019, 6:13:37 PM
+    Document   : listproduct
+    Created on : Dec 11, 2019, 2:51:14 PM
     Author     : Admin
 --%>
+
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -14,7 +15,7 @@
         <title>Cosmetics</title>
         <link rel="stylesheet" href="css/main.css"/>
         <link rel="icon" href="img/icon.jpeg">
-        <c:set var="productdoc" value="${sessionScope.HOMERECOMMENDDOC}" />
+        <c:set var="productdoc" value="${sessionScope.LISTPRODUCTDOC}" />
         <x:set var="listProduct" select="$productdoc//product" />
         <script>
             var list = new Array();
@@ -97,8 +98,8 @@
                     pprice.setAttribute("class", "productprice");
                     pprice.innerHTML = pageList[r].price.toLocaleString('de-DE', {
                         minimumFractionDigits: 0
-                    }) + "đ"
-                            ;
+                    })+"đ"
+                    ;
                     div.appendChild(img);
                     div.appendChild(pname);
                     div.appendChild(pcate);
@@ -145,13 +146,13 @@
                     <a class="linkdangnhap" href="login.html">Đăng nhập / Đăng ký</a>
                 </c:if>
                 <c:if test="${sessionScope.USERNAME!=null}">
-                    <a href="survey.jsp">hi, <c:out value="${sessionScope.USERNAME}"/></a>&nbsp;&nbsp;&nbsp;<a class="linkdangnhap" href="LogoutServlet">Đăng Xuất</a>
+                    hi, <c:out value="${sessionScope.USERNAME}"/>&nbsp;&nbsp;&nbsp;<a class="linkdangnhap" href="LogoutServlet">Đăng Xuất</a>
                 </c:if>
             </div>
         </div>
         <div class="menu">
             <ul style="padding-left: 185px">
-                <li><a href="#home">Home</a></li>
+                <li><a href="index.jsp">Home</a></li>
                 <li class="dropdown"><a href="javascript:void(0)" class="dropbtn">Category</a>
                     <div class="dropdown-content">
                         <x:forEach var="category" select="$listCategory" varStatus="counter">
@@ -176,9 +177,8 @@
             </ul>
         </div>
     </div>
-    <div class="main"><img alt="" src="img/home.jpg"/>
+    <div class="main">
         <div class="mainlist">
-            <p style="font-size: 20px">We Recommanded for You by your Data</p>
             <div id="listproduct">
             </div>
             <div style="float: left;width: 100%;padding-top: 40px;padding-bottom: 20px">
@@ -196,3 +196,4 @@
     </div>
 </body>
 </html>
+

@@ -7,9 +7,7 @@ package com.appropicatecosmetic.servlet;
 
 import com.appropicatecosmetic.dao.UserDAO;
 import com.appropicatecosmetic.dao.XmlDAO;
-import com.appropicatecosmetic.entity.TblUser;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +23,7 @@ import org.xml.sax.InputSource;
  *
  * @author Admin
  */
-public class HomeServlet extends HttpServlet {
+public class ListServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,35 +37,31 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try {
+            String categoryId = request.getParameter("categoryId");
+            String skintypeId = request.getParameter("skintypeId");
+            String concernId = request.getParameter("concernId");
+
             HttpSession session = request.getSession();
             String userId = (String) session.getAttribute("USERID");
             if (userId == null) {
                 userId = UserDAO.getInstance().checkDefaultUser().getUserId();
-            } else {
-                TblUser user = UserDAO.getInstance().getUserById(userId);
-                if (user.getTblConcernCollection().isEmpty() && user.getTblSkinTypeCollection().isEmpty()) {
-                    userId = UserDAO.getInstance().checkDefaultUser().getUserId();
-                }
             }
+            String result = "";
             XmlDAO xmlDAO = new XmlDAO();
-            String concernList = xmlDAO.getListConcern();
-            String skintypeList = xmlDAO.getListSkinType();
-            String categoryList = xmlDAO.getListCategory();
-            String result = xmlDAO.getHomeRecommend(userId);
+            if (categoryId != null && !categoryId.isEmpty()) {
+                result = xmlDAO.getPageWithCategoryRecommend(userId, categoryId);
+            } else if (skintypeId != null && !skintypeId.isEmpty()) {
+                result = xmlDAO.getPageWithSkintypeRecommend(userId, skintypeId);
+            } else if (concernId != null && !concernId.isEmpty()) {
+                result = xmlDAO.getPageWithConcernRecommend(userId, concernId);
+            }
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(new InputSource(new StringReader(result)));
-            Document docConcern = db.parse(new InputSource(new StringReader(concernList)));
-            Document docSkintype = db.parse(new InputSource(new StringReader(skintypeList)));
-            Document docCategory = db.parse(new InputSource(new StringReader(categoryList)));
-            session.setAttribute("HOMERECOMMENDDOC", doc);
-            session.setAttribute("CONCERNSLIST", docConcern);
-            session.setAttribute("SKINTYPELIST", docSkintype);
-            session.setAttribute("CATEGORYLIST", docCategory);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            session.setAttribute("LISTPRODUCTDOC", doc);
+            request.getRequestDispatcher("listproduct.jsp").forward(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

@@ -207,11 +207,11 @@ li.dropdown {
 	height: 200px
 }
 
-#listproduct {
+.listproduct {
 	float: left;
 	width: 100%;
 	height: auto;
-	min-height: 400px;
+	min-height: 460px;
 }
 
 .product {
@@ -262,4 +262,69 @@ li.dropdown {
 	position: absolute;
 	bottom:0px;
 	color: orange;
+}
+
+.loginform {
+	width: 360px;
+	height: 300px;
+	float: left;
+	text-align: left;
+	position: absolute;
+	left: 35%;
+	border: solid 1px #E2E4E6;
+	margin-top: 20px;
+}
+
+.formlogin {
+	padding: 30px;
+}
+
+.input {
+	width: 100%;
+	border-bottom: solid 1px #E9EBEE;
+	height: 25px;
+	border-top: hidden;
+	border-left: hidden;
+	border-right: hidden;
+	margin-bottom: 45px;
+}
+input:focus, textarea:focus, select:focus{
+        outline: none;
+    }
+
+.buton {
+	width: 100%;
+	border: hidden;
+	height: 40px;
+	color: white;
+	font-weight: bold;
+	background-color: gray;
+}
+.buton:hover{
+	background-color: orange;
+}
+
+.surveyform {
+	width: 500px;
+	float: left;
+	text-align: left;
+        margin-left: 250px;
+	left: 35%;
+	border: solid 1px #E2E4E6;
+	margin-top: 20px;
+        margin-bottom: 30px;
+}
+
+.formsurvey {
+	padding: 30px;
+}
+
+.skintype {
+	width: 50%;
+	float: left;
+}
+
+.concern {
+	width: 50%;
+	float: left;
 }

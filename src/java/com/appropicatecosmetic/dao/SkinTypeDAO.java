@@ -54,4 +54,22 @@ public class SkinTypeDAO extends BaseDAO<TblSkinType> {
         }
         return null;
     }
+    public synchronized TblSkinType getSkinTypeById(String id) {
+        EntityManager em = DBUtils.getEntityManager();
+        try {
+            List<TblSkinType> concerns = em.createNamedQuery("TblSkinType.findBySkinTypeId", TblSkinType.class)
+                    .setParameter("skinTypeId", id)
+                    .getResultList();
+            if (concerns != null && !concerns.isEmpty()) {
+                return concerns.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
 }

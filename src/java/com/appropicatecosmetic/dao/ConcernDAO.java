@@ -10,7 +10,6 @@ import com.appropicatecosmetic.utils.DBUtils;
 import com.appropicatecosmetic.utils.TextUtils;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 
 /**
  *
@@ -46,6 +45,25 @@ public class ConcernDAO extends BaseDAO<TblConcern> {
             concern.setConcernId(TextUtils.getUUID());
             concern.setConcernName(name);
             return create(concern);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+    
+    public synchronized TblConcern getConcernByID(String id) {
+        EntityManager em = DBUtils.getEntityManager();
+        try {
+            List<TblConcern> concerns = em.createNamedQuery("TblConcern.findByConcernId", TblConcern.class)
+                    .setParameter("concernId", id)
+                    .getResultList();
+            if (concerns != null && !concerns.isEmpty()) {
+                return concerns.get(0);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

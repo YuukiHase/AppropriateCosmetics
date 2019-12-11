@@ -97,8 +97,8 @@
                     pprice.setAttribute("class", "productprice");
                     pprice.innerHTML = pageList[r].price.toLocaleString('de-DE', {
                         minimumFractionDigits: 0
-                    })+"đ"
-                    ;
+                    }) + "đ"
+                            ;
                     div.appendChild(img);
                     div.appendChild(pname);
                     div.appendChild(pcate);
@@ -140,7 +140,14 @@
                     <input class="buttonsearch" type="button" value="Tìm Kiếm">
                 </form>
             </div>
-            <div class="login"><a class="linkdangnhap" href="#">Đăng nhập / Đăng ký</a></div>
+            <div class="login">
+                <c:if test="${sessionScope.USERNAME==null}">
+                    <a class="linkdangnhap" href="login.html">Đăng nhập / Đăng ký</a>
+                </c:if>
+                <c:if test="${sessionScope.USERNAME!=null}">
+                    <a href="survey.jsp">hi, <c:out value="${sessionScope.USERNAME}"/></a>&nbsp;&nbsp;&nbsp;<a class="linkdangnhap" href="LogoutServlet">Đăng Xuất</a>
+                </c:if>
+            </div>
         </div>
         <div class="menu">
             <ul style="padding-left: 185px">
@@ -148,21 +155,21 @@
                 <li class="dropdown"><a href="javascript:void(0)" class="dropbtn">Category</a>
                     <div class="dropdown-content">
                         <x:forEach var="category" select="$listCategory" varStatus="counter">
-                            <a href="#"><x:out select="$category/categoryName"/></a>
+                            <a href="ListServlet?categoryId=<x:out select="$category/categoryId"/>"><x:out select="$category/categoryName"/></a>
                         </x:forEach>
                     </div>
                 </li>
                 <li class="dropdown"><a href="javascript:void(0)" class="dropbtn">Skin Type</a>
                     <div class="dropdown-content">
                         <x:forEach var="skintype" select="$listSkintype" varStatus="counter">
-                            <a href="#"><x:out select="$skintype/skinTypeName"/></a>
+                            <a href="ListServlet?skintypeId=<x:out select="$skintype/skinTypeId"/>"><x:out select="$skintype/skinTypeName"/></a>
                         </x:forEach>
                     </div>
                 </li>
                 <li class="dropdown"><a href="javascript:void(0)" class="dropbtn">Skin Concern</a>
                     <div class="dropdown-content">
                         <x:forEach var="concern" select="$listConcern" varStatus="counter">
-                            <a href="#"><x:out select="$concern/concernName"/></a>
+                            <a href="ListServlet?concernId=<x:out select="$concern/concernId"/>"><x:out select="$concern/concernName"/></a>
                         </x:forEach>
                     </div>
                 </li>

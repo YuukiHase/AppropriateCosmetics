@@ -56,6 +56,44 @@ public class UserDAO extends BaseDAO<TblUser> {
         return null;
     }
     
+    public synchronized TblUser checkUser(String userId,String password) {
+        EntityManager em = DBUtils.getEntityManager();
+        try {
+            List<TblUser> listuser = em.createNativeQuery("select * from tbluser where fullname =? and password=?", TblUser.class)
+                    .setParameter(1, userId)
+                    .setParameter(2, password)
+                    .getResultList();
+            if (!listuser.isEmpty()) {
+                return listuser.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
+    public synchronized TblUser getUserById(String userId) {
+        EntityManager em = DBUtils.getEntityManager();
+        try {
+            List<TblUser> listuser = em.createNativeQuery("select * from tbluser where userId =?", TblUser.class)
+                    .setParameter(1, userId)
+                    .getResultList();
+            if (!listuser.isEmpty()) {
+                return listuser.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
     public synchronized List<TblUser> getAllUser() {
         return getAll("TblUser.findAll");
     }
