@@ -31,6 +31,7 @@ public class ConcernDAO extends BaseDAO<TblConcern> {
         }
         return instance;
     }
+
     public synchronized TblConcern getAndInsertIfNewConsern(String name) {
         EntityManager em = DBUtils.getEntityManager();
         try {
@@ -40,7 +41,7 @@ public class ConcernDAO extends BaseDAO<TblConcern> {
             if (concerns != null && !concerns.isEmpty()) {
                 return concerns.get(0);
             }
-            
+
             TblConcern concern = new TblConcern();
             concern.setConcernId(TextUtils.getUUID());
             concern.setConcernName(name);
@@ -54,7 +55,7 @@ public class ConcernDAO extends BaseDAO<TblConcern> {
         }
         return null;
     }
-    
+
     public synchronized TblConcern getConcernByID(String id) {
         EntityManager em = DBUtils.getEntityManager();
         try {

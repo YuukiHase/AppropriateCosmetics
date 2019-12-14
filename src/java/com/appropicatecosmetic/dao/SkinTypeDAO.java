@@ -31,6 +31,7 @@ public class SkinTypeDAO extends BaseDAO<TblSkinType> {
         }
         return instance;
     }
+
     public synchronized TblSkinType getAndInsertIfNewSkinType(String name) {
         EntityManager em = DBUtils.getEntityManager();
         try {
@@ -40,7 +41,7 @@ public class SkinTypeDAO extends BaseDAO<TblSkinType> {
             if (skinTypes != null && !skinTypes.isEmpty()) {
                 return skinTypes.get(0);
             }
-            
+
             TblSkinType skinType = new TblSkinType();
             skinType.setSkinTypeId(TextUtils.getUUID());
             skinType.setSkinTypeName(name);
@@ -54,6 +55,7 @@ public class SkinTypeDAO extends BaseDAO<TblSkinType> {
         }
         return null;
     }
+
     public synchronized TblSkinType getSkinTypeById(String id) {
         EntityManager em = DBUtils.getEntityManager();
         try {

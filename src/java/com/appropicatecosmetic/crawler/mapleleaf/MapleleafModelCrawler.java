@@ -113,13 +113,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String brand = "";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
-
+            event = (XMLEvent) eventReader.next();
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "span", "class", "product-vendor")) {
@@ -135,12 +129,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String name = "";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
 
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
@@ -161,12 +150,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String price = "0";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
 
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
@@ -186,12 +170,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String link = "";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "img", "id", "ProductPhotoImg")) {
@@ -213,12 +192,7 @@ public class MapleleafModelCrawler extends BaseCrawler {
         String data = "";
         boolean isStart = false;
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "div", "id", "tab-1")) {

@@ -5,6 +5,7 @@
  */
 package com.appropicatecosmetic.crawler.mapleleaf;
 
+import com.appropicatecosmetic.contants.DataContaints;
 import com.appropicatecosmetic.crawler.BaseCrawler;
 import com.appropicatecosmetic.crawler.BaseThread;
 import com.appropicatecosmetic.dao.CategoryDAO;
@@ -50,20 +51,17 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
             String document = getModelListDocument(reader);
             document = TextUtils.refineHtml(document);
             List<String> modelLink = getModelLinks(document);
-            System.out.println("2:" + categoryName + " " + modelLink.size());
             for (String link : modelLink) {
-                MapleleafModelCrawler mapleleafModelCrawler = new MapleleafModelCrawler("http://mapleleafhangxachtay.com" + link, categoryName, getContext());
+                MapleleafModelCrawler mapleleafModelCrawler = new MapleleafModelCrawler(DataContaints.MAPLELINK + link, categoryName, getContext());
                 Model model = mapleleafModelCrawler.getModel();
-
                 TblCategory category = CategoryDAO.getInstance()
                         .saveCategoryWhileCrawling(model.getCategory());
 
                 TblProduct product = new TblProduct(TextUtils.getUUID(), model.getName(), model.getPrice(),
                         model.getImageLink(), model.getProductLink(),
-                        model.getDetail(), model.getOrigin(), model.getVolume(),model.getBrand(),
+                        model.getDetail(), model.getOrigin(), model.getVolume(), model.getBrand(),
                         model.getConcerns(), model.getSkinTypes(), category);
                 ProductDAO.getInstance().saveProductWhileCrawling(product);
-                //System.out.println(product.getProductLink());
             }
             synchronized (BaseThread.getInstance()) {
                 while (BaseThread.isSuspended()) {
@@ -77,7 +75,7 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
 
     private String getModelListDocument(BufferedReader reader) throws IOException {
         String line = "";
-        String document = "";
+        String document = "<doc>";
         boolean isStart = false;
         while ((line = reader.readLine()) != null) {
             if (!isStart && line.contains("<div class=\"collection-grid\">")) {

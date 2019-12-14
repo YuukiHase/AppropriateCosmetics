@@ -28,6 +28,10 @@
         <servlet-name>SurveyServlet</servlet-name>
         <servlet-class>com.appropicatecosmetic.servlet.SurveyServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DetailServlet</servlet-name>
+        <servlet-class>com.appropicatecosmetic.servlet.DetailServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CrawlServlet</servlet-name>
         <url-pattern>/CrawlServlet</url-pattern>
@@ -56,6 +60,10 @@
         <servlet-name>SurveyServlet</servlet-name>
         <url-pattern>/SurveyServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailServlet</servlet-name>
+        <url-pattern>/DetailServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -63,5 +71,6 @@
     </session-config>
     <welcome-file-list>
         <welcome-file>HomeServlet</welcome-file>
+        <!--<welcome-file>crawl.html</welcome-file>-->
     </welcome-file-list>
 </web-app>

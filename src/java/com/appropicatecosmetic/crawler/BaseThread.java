@@ -35,8 +35,8 @@ public class BaseThread extends Thread {
         }
         return instance;
     }
-    
-    public  void supendThread(){
+
+    public void supendThread() {
         setSuspended(true);
         System.out.println("Suspended");
     }

@@ -45,7 +45,7 @@ public class MaihanCategoriesCrawler extends BaseCrawler {
 
     private String getCategoryDocument(final BufferedReader reader) throws IOException {
         String line = "";
-        String document = "";
+        String document = "<doc>";
         boolean isStart = false;
         while ((line = reader.readLine()) != null) {
             if (isStart && line.contains("</div>")) {
@@ -58,6 +58,42 @@ public class MaihanCategoriesCrawler extends BaseCrawler {
                 isStart = true;
             }
         }
+        isStart = false;
+        while ((line = reader.readLine()) != null) {
+            if (isStart && line.contains("</ul>")) {
+                break;
+            }
+            if (!isStart && line.contains("<a href=\"https://www.maihan.vn/tam-trang/\"")) {
+                isStart = true;
+            }
+            if (isStart) {
+                document += line.trim();
+            }
+        }
+        isStart = false;
+        while ((line = reader.readLine()) != null) {
+            if (isStart && line.contains("</ul>")) {
+                break;
+            }
+            if (!isStart && line.contains("<a href=\"https://www.maihan.vn/vien-uong-dep-da/\"")) {
+                isStart = true;
+            }
+            if (isStart) {
+                document += line.trim();
+            }
+        }
+        isStart = false;
+        while ((line = reader.readLine()) != null) {
+            if (isStart && line.contains("</ul>")) {
+                break;
+            }
+            if (!isStart && line.contains("<a href=\"https://www.maihan.vn/son-moi/\"")) {
+                isStart = true;
+            }
+            if (isStart) {
+                document += line.trim();
+            }
+        }
         return document;
     }
 
@@ -68,7 +104,8 @@ public class MaihanCategoriesCrawler extends BaseCrawler {
         Map<String, String> categories = new HashMap<>();
 
         while (eventReader.hasNext()) {
-            XMLEvent event = (XMLEvent) eventReader.next();
+            XMLEvent event = null;
+            event = (XMLEvent) eventReader.next();
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 String tagName = startElement.getName().getLocalPart();
@@ -82,7 +119,6 @@ public class MaihanCategoriesCrawler extends BaseCrawler {
                 }
             }
         }
-
         return categories;
     }
 }

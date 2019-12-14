@@ -15,4 +15,7 @@ public class DataContaints {
     public static final String KOREA = "Hàn quốc";
     public static final String JAPAN = "Nhật Bản";
     public static final String AMERICA = "Mỹ";
+    public static final String MAIHAN = "https://www.maihan.vn/";
+    public static final String MAPLE = "http://mapleleafhangxachtay.com/";
+    public static final String MAPLELINK = "http://mapleleafhangxachtay.com";
 }

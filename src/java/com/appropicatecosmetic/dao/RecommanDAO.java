@@ -11,7 +11,6 @@ import com.appropicatecosmetic.entity.TblUser;
 import com.appropicatecosmetic.utils.DBUtils;
 import com.appropicatecosmetic.utils.TextUtils;
 import java.util.List;
-import java.util.UUID;
 import javax.persistence.EntityManager;
 
 /**

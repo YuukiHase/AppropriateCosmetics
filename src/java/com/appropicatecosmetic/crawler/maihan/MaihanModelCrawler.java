@@ -198,13 +198,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String price = "0";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
-
+            event = (XMLEvent) eventReader.next();
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "span", "class", "text_5") || ElementChecker.isElementWith(startElement, "span", "class", "text_5 xxx")) {
@@ -222,12 +216,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String link = "";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "img", "alt", "One")) {
@@ -249,12 +238,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         String data = "";
         boolean isStart = false;
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "div", "class", "top_3")) {
@@ -273,12 +257,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String data = "";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (ElementChecker.isElementWith(startElement, "div", "class", "col-xs-12 col-sm-7 col-md-7 col-lg-7")) {
@@ -298,12 +277,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String data = "";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
             if (event.isCharacters()) {
                 Characters character = event.asCharacters();
                 if (character.getData().contains("Xuất xứ")) {
@@ -323,12 +297,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String data = "";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
             if (event.isCharacters()) {
                 Characters character = event.asCharacters();
                 if (character.getData().contains("Quy cách")) {
@@ -348,12 +317,7 @@ public class MaihanModelCrawler extends BaseCrawler {
         XMLEvent event = null;
         String data = "";
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
             if (event.isCharacters()) {
                 Characters character = event.asCharacters();
                 if (character.getData().contains("Loại da:")) {

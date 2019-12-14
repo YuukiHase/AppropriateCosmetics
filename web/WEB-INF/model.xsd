@@ -13,7 +13,7 @@ and open the template in the editor.
     <xs:element name="models" type="listModel"/>
     <xs:complexType name="listModel">
         <xs:sequence>
-                <xs:element name="model" type="modelItem" maxOccurs="unbounded"/>
+            <xs:element name="model" type="modelItem" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="modelItem">

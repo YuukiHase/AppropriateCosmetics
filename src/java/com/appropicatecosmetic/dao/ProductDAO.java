@@ -36,6 +36,25 @@ public class ProductDAO extends BaseDAO<TblProduct> {
         return instance;
     }
 
+    public synchronized TblProduct getProductByID(String id) {
+        EntityManager em = DBUtils.getEntityManager();
+        try {
+            List<TblProduct> product = em.createNamedQuery("TblProduct.findByProductId", TblProduct.class)
+                    .setParameter("productId", id)
+                    .getResultList();
+            if (product != null && !product.isEmpty()) {
+                return product.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
     public synchronized TblProduct saveProductWhileCrawling(TblProduct product) {
         EntityManager em = DBUtils.getEntityManager();
         try {

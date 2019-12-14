@@ -45,19 +45,12 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
 
     @Override
     public void run() {
-        //        Category category = createCategory(categoryName);
-        //        if (category == null) {
-        //            Logger.getLogger(MaihanCategoriesPageCrawler.class.getName())
-        //                    .log(Level.SEVERE, null, new Exception("Error: category null"));
-        //            return;
-        //        }
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
             String document = getModelListDocument(reader);
             document = TextUtils.refineHtml(document);
             List<String> modelLink = getModelLinks(document);
-            System.out.println("1:"+ categoryName + " " + modelLink.size());
             for (String link : modelLink) {
                 MaihanModelCrawler maihanModelCrawler = new MaihanModelCrawler(link, categoryName, getContext());
                 Model model = maihanModelCrawler.getModel();
@@ -66,11 +59,10 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
                         .saveCategoryWhileCrawling(model.getCategory());
 
                 TblProduct product = new TblProduct(TextUtils.getUUID(), model.getName(), model.getPrice(),
-                         model.getImageLink(), model.getProductLink(),
-                         model.getDetail(), model.getOrigin(), model.getVolume(),model.getBrand(),
-                         model.getConcerns(), model.getSkinTypes(), category);
+                        model.getImageLink(), model.getProductLink(),
+                        model.getDetail(), model.getOrigin(), model.getVolume(), model.getBrand(),
+                        model.getConcerns(), model.getSkinTypes(), category);
                 ProductDAO.getInstance().saveProductWhileCrawling(product);
-                //System.out.println(product.getProductLink());
             }
             synchronized (BaseThread.getInstance()) {
                 while (BaseThread.isSuspended()) {
@@ -84,7 +76,7 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
 
     private String getModelListDocument(BufferedReader reader) throws IOException {
         String line = "";
-        String document = "";
+        String document = "<doc>";
         boolean isStart = false;
         while ((line = reader.readLine()) != null) {
             if (!isStart && line.contains("<div class=\"row block_2\">")) {
@@ -106,11 +98,7 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
         XMLEvent event = null;
         List<String> links = new ArrayList<>();
         while (eventReader.hasNext()) {
-            try {
-                event = (XMLEvent) eventReader.next();
-            } catch (Exception e) {
-                break;
-            }
+            event = (XMLEvent) eventReader.next();
 
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();

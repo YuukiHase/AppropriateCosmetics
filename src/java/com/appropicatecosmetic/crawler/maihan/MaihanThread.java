@@ -5,6 +5,7 @@
  */
 package com.appropicatecosmetic.crawler.maihan;
 
+import com.appropicatecosmetic.contants.DataContaints;
 import com.appropicatecosmetic.crawler.BaseThread;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -29,9 +30,8 @@ public class MaihanThread extends BaseThread implements Runnable {
         while (true) {
             try {
                 MaihanCategoriesCrawler categoriesCrawler = new MaihanCategoriesCrawler(context);
-                Map<String, String> categories = categoriesCrawler.getCategories("https://www.maihan.vn/");//todo
+                Map<String, String> categories = categoriesCrawler.getCategories(DataContaints.MAIHAN);
                 for (Map.Entry<String, String> entry : categories.entrySet()) {
-                    //System.out.println("category: " + entry.getKey() + " " + entry.getValue());
                     Thread crawlingThread = new Thread(
                             new MaihanCategoriesPageCrawler(context, entry.getKey(), entry.getValue()));
                     crawlingThread.start();
@@ -42,7 +42,7 @@ public class MaihanThread extends BaseThread implements Runnable {
                         }
                     }
                 }
-                MaihanThread.sleep(TimeUnit.DAYS.toMillis(1));//todo
+                MaihanThread.sleep(TimeUnit.DAYS.toMillis(1));
                 synchronized (BaseThread.getInstance()) {
                     while (BaseThread.isSuspended()) {
                         BaseThread.getInstance().wait();

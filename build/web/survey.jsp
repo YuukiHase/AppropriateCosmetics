@@ -90,8 +90,8 @@
                             <p style="margin-bottom: 10px;">Concern</p>
                             <x:forEach var="concern" select="$listConcern" varStatus="counter">
                                 <p>
-                                <input class="" type="checkbox" name="concern" value="<x:out select="$concern/concernId"/>">
-                                <label><x:out select="$concern/concernName"/></label>
+                                    <input class="" type="checkbox" name="concern" value="<x:out select="$concern/concernId"/>">
+                                    <label><x:out select="$concern/concernName"/></label>
                                 </p>
                             </x:forEach>
                         </div>

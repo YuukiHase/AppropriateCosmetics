@@ -97,14 +97,18 @@
                     pprice.setAttribute("class", "productprice");
                     pprice.innerHTML = pageList[r].price.toLocaleString('de-DE', {
                         minimumFractionDigits: 0
-                    }) + "đ"
-                            ;
+                    }) + "đ";
+                    var linkDetail = document.createElement("a");
+                    linkDetail.setAttribute("style", "color:black");
+                    linkDetail.setAttribute("href", "DetailServlet?productId=" + pageList[r].id);
+                    linkDetail.appendChild(pname);
                     div.appendChild(img);
                     div.appendChild(pname);
                     div.appendChild(pcate);
                     div.appendChild(pbrand);
                     div.appendChild(pprice);
-                    productlistx.appendChild(div);
+                    linkDetail.appendChild(div)
+                    productlistx.appendChild(linkDetail);
                     document.getElementById("paging").value = currentPage + "/" + numberOfPages;
                 }
             }

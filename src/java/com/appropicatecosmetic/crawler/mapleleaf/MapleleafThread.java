@@ -5,6 +5,7 @@
  */
 package com.appropicatecosmetic.crawler.mapleleaf;
 
+import com.appropicatecosmetic.contants.DataContaints;
 import com.appropicatecosmetic.crawler.BaseThread;
 import com.appropicatecosmetic.crawler.maihan.MaihanThread;
 import java.util.Map;
@@ -30,11 +31,10 @@ public class MapleleafThread extends BaseThread implements Runnable {
         while (true) {
             try {
                 MapleleafCategoriesCrawler categoriesCrawler = new MapleleafCategoriesCrawler(context);
-                Map<String, String> categories = categoriesCrawler.getCategories("http://mapleleafhangxachtay.com/");//todo
+                Map<String, String> categories = categoriesCrawler.getCategories(DataContaints.MAPLE);
                 for (Map.Entry<String, String> entry : categories.entrySet()) {
-                    //System.out.println("category: http://mapleleafhangxachtay.com" + entry.getKey() + " " + entry.getValue());
                     Thread crawlingThread = new Thread(
-                            new MapleleafCategoryPageCrawler(context, "http://mapleleafhangxachtay.com" + entry.getKey(), entry.getValue()));
+                            new MapleleafCategoryPageCrawler(context, DataContaints.MAPLELINK + entry.getKey(), entry.getValue()));
                     crawlingThread.start();
 
                     synchronized (BaseThread.getInstance()) {
@@ -43,7 +43,7 @@ public class MapleleafThread extends BaseThread implements Runnable {
                         }
                     }
                 }
-                MaihanThread.sleep(TimeUnit.DAYS.toMillis(1));//todo
+                MaihanThread.sleep(TimeUnit.DAYS.toMillis(1));
                 synchronized (BaseThread.getInstance()) {
                     while (BaseThread.isSuspended()) {
                         BaseThread.getInstance().wait();

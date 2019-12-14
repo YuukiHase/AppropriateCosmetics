@@ -28,11 +28,12 @@ import javax.xml.stream.events.XMLEvent;
  *
  * @author PhuCV
  */
-public class MapleleafCategoriesCrawler extends BaseCrawler{
+public class MapleleafCategoriesCrawler extends BaseCrawler {
 
     public MapleleafCategoriesCrawler(ServletContext context) {
         super(context);
     }
+
     public Map<String, String> getCategories(String url) {
         try (BufferedReader reader = getBufferedReaderForURL(url)) {
             String document = getCategoryDocument(reader);
@@ -45,7 +46,7 @@ public class MapleleafCategoriesCrawler extends BaseCrawler{
 
     private String getCategoryDocument(final BufferedReader reader) throws IOException {
         String line = "";
-        String document = "";
+        String document = "<doc>";
         boolean isStart = false;
         while ((line = reader.readLine()) != null) {
             if (isStart && line.contains("<a href=\"/collections/laroche-posay\">")) {

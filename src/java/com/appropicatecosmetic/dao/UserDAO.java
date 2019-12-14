@@ -55,8 +55,8 @@ public class UserDAO extends BaseDAO<TblUser> {
         }
         return null;
     }
-    
-    public synchronized TblUser checkUser(String userId,String password) {
+
+    public synchronized TblUser checkUser(String userId, String password) {
         EntityManager em = DBUtils.getEntityManager();
         try {
             List<TblUser> listuser = em.createNativeQuery("select * from tbluser where fullname =? and password=?", TblUser.class)
@@ -94,6 +94,7 @@ public class UserDAO extends BaseDAO<TblUser> {
         }
         return null;
     }
+
     public synchronized List<TblUser> getAllUser() {
         return getAll("TblUser.findAll");
     }
