@@ -7,16 +7,9 @@ and open the template in the editor.
 
 <xs:schema version="1.0"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://xml.netbeans.org/schema/models"
-           xmlns="http://xml.netbeans.org/schema/models"
            elementFormDefault="qualified">
-    <xs:element name="models" type="listModel"/>
-    <xs:complexType name="listModel">
-        <xs:sequence>
-            <xs:element name="model" type="modelItem" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="modelItem">
+    <xs:element name="tblProduct" type="tblProduct"/>
+    <xs:complexType name="tblProduct">
         <xs:sequence>
             <xs:element name="brand" nillable="false" minOccurs="1" >
                 <xs:simpleType>
@@ -67,6 +60,31 @@ and open the template in the editor.
                         <xs:minLength value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
+            </xs:element>
+            <xs:element name="productId" type="xs:string"/>
+            <xs:element name="tblConcernCollection" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="concernId" type="xs:string" minOccurs="0" />
+                        <xs:element name="concernName" type="xs:string" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="tblSkinTypeCollection" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="skinTypeId" type="xs:string" minOccurs="0" />
+                        <xs:element name="skinTypeName" type="xs:string" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="categoryId" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="categoryId" type="xs:string" minOccurs="0" />
+                        <xs:element name="categoryName" type="xs:string" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>

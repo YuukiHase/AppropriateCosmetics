@@ -31,10 +31,12 @@ public class MapleleafThread extends BaseThread implements Runnable {
         while (true) {
             try {
                 MapleleafCategoriesCrawler categoriesCrawler = new MapleleafCategoriesCrawler(context);
-                Map<String, String> categories = categoriesCrawler.getCategories(DataContaints.MAPLE);
+                Map<String, String> categories = 
+                        categoriesCrawler.getCategories(DataContaints.getInstance().getMaplelink(context));
                 for (Map.Entry<String, String> entry : categories.entrySet()) {
                     Thread crawlingThread = new Thread(
-                            new MapleleafCategoryPageCrawler(context, DataContaints.MAPLELINK + entry.getKey(), entry.getValue()));
+                            new MapleleafCategoryPageCrawler(context, 
+                                    DataContaints.getInstance().getMapleLinkData(context) + entry.getKey(), entry.getValue()));
                     crawlingThread.start();
 
                     synchronized (BaseThread.getInstance()) {

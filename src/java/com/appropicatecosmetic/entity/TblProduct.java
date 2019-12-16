@@ -19,8 +19,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
@@ -39,6 +44,22 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TblProduct.findByDetail", query = "SELECT t FROM TblProduct t WHERE t.detail = :detail")
     , @NamedQuery(name = "TblProduct.findByOrigin", query = "SELECT t FROM TblProduct t WHERE t.origin = :origin")
     , @NamedQuery(name = "TblProduct.findByVolume", query = "SELECT t FROM TblProduct t WHERE t.volume = :volume")})
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "tblProduct", propOrder = {
+    "brand",
+    "name",
+    "price",
+    "imageLink",
+    "productLink",
+    "detail",
+    "origin",
+    "volume",
+    "productId",
+    "tblConcernCollection",
+    "tblSkinTypeCollection",
+    "tblRecommandCollection",
+    "categoryId"
+})
 public class TblProduct implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,20 +67,29 @@ public class TblProduct implements Serializable {
     @Basic(optional = false)
     @Column(name = "productId", nullable = false, length = 36)
     private String productId;
+    @XmlElement(required = true)
     @Column(name = "name", length = 2147483647)
     private String name;
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "positiveInteger")
     @Column(name = "price")
     private Integer price;
+    @XmlElement(required = true)
     @Column(name = "imageLink", length = 2147483647)
     private String imageLink;
+    @XmlElement(required = true)
     @Column(name = "productLink", length = 2147483647)
     private String productLink;
+    @XmlElement(required = true)
     @Column(name = "detail", length = 2147483647)
     private String detail;
+    @XmlElement(required = true)
     @Column(name = "origin", length = 2147483647)
     private String origin;
+    @XmlElement(required = true)
     @Column(name = "volume", length = 2147483647)
     private String volume;
+    @XmlElement(required = true)
     @Column(name = "brand", length = 2147483647)
     private String brand;
     @JoinTable(name = "MappingProductConcern", joinColumns = {

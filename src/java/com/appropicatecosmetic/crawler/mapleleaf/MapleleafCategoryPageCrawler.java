@@ -14,6 +14,7 @@ import com.appropicatecosmetic.dto.Model;
 import com.appropicatecosmetic.entity.TblCategory;
 import com.appropicatecosmetic.entity.TblProduct;
 import com.appropicatecosmetic.utils.ElementChecker;
+import com.appropicatecosmetic.utils.JAXBUtils;
 import com.appropicatecosmetic.utils.TextUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,7 +53,9 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
             document = TextUtils.refineHtml(document);
             List<String> modelLink = getModelLinks(document);
             for (String link : modelLink) {
-                MapleleafModelCrawler mapleleafModelCrawler = new MapleleafModelCrawler(DataContaints.MAPLELINK + link, categoryName, getContext());
+                MapleleafModelCrawler mapleleafModelCrawler = 
+                        new MapleleafModelCrawler(
+                                url.substring(0, url.length() - 1) + link, categoryName, getContext());
                 Model model = mapleleafModelCrawler.getModel();
                 TblCategory category = CategoryDAO.getInstance()
                         .saveCategoryWhileCrawling(model.getCategory());
@@ -61,7 +64,10 @@ public class MapleleafCategoryPageCrawler extends BaseCrawler implements Runnabl
                         model.getImageLink(), model.getProductLink(),
                         model.getDetail(), model.getOrigin(), model.getVolume(), model.getBrand(),
                         model.getConcerns(), model.getSkinTypes(), category);
-                ProductDAO.getInstance().saveProductWhileCrawling(product);
+                TblProduct checked = JAXBUtils.validateProduct(product, super.getContext());
+                if (checked != null) {
+                    ProductDAO.getInstance().saveProductWhileCrawling(checked);
+                }
             }
             synchronized (BaseThread.getInstance()) {
                 while (BaseThread.isSuspended()) {

@@ -13,6 +13,7 @@ import com.appropicatecosmetic.dto.Model;
 import com.appropicatecosmetic.entity.TblCategory;
 import com.appropicatecosmetic.entity.TblProduct;
 import com.appropicatecosmetic.utils.ElementChecker;
+import com.appropicatecosmetic.utils.JAXBUtils;
 import com.appropicatecosmetic.utils.TextUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +36,6 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
 
     private String url;
     private String categoryName;
-    //protected 
 
     public MaihanCategoriesPageCrawler(ServletContext context, String url, String categoryName) {
         super(context);
@@ -62,7 +62,11 @@ public class MaihanCategoriesPageCrawler extends BaseCrawler implements Runnable
                         model.getImageLink(), model.getProductLink(),
                         model.getDetail(), model.getOrigin(), model.getVolume(), model.getBrand(),
                         model.getConcerns(), model.getSkinTypes(), category);
-                ProductDAO.getInstance().saveProductWhileCrawling(product);
+
+                TblProduct checked = JAXBUtils.validateProduct(product, super.getContext());
+                if (checked != null) {
+                    ProductDAO.getInstance().saveProductWhileCrawling(checked);
+                }
             }
             synchronized (BaseThread.getInstance()) {
                 while (BaseThread.isSuspended()) {

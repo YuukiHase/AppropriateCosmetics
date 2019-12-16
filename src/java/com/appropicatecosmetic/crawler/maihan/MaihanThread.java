@@ -30,7 +30,8 @@ public class MaihanThread extends BaseThread implements Runnable {
         while (true) {
             try {
                 MaihanCategoriesCrawler categoriesCrawler = new MaihanCategoriesCrawler(context);
-                Map<String, String> categories = categoriesCrawler.getCategories(DataContaints.MAIHAN);
+                Map<String, String> categories = 
+                        categoriesCrawler.getCategories(DataContaints.getInstance().getMaihanlink(context));
                 for (Map.Entry<String, String> entry : categories.entrySet()) {
                     Thread crawlingThread = new Thread(
                             new MaihanCategoriesPageCrawler(context, entry.getKey(), entry.getValue()));
