@@ -151,7 +151,7 @@
                     <a class="linkdangnhap" href="login.html">Đăng nhập / Đăng ký</a>
                 </c:if>
                 <c:if test="${sessionScope.USERNAME!=null}">
-                    hi, <c:out value="${sessionScope.USERNAME}"/>&nbsp;&nbsp;&nbsp;<a class="linkdangnhap" href="LogoutServlet">Đăng Xuất</a>
+                    <a href="survey.jsp">hi, <c:out value="${sessionScope.USERNAME}"/></a>&nbsp;&nbsp;&nbsp;<a class="linkdangnhap" href="LogoutServlet">Đăng Xuất</a>
                 </c:if>
             </div>
         </div>
